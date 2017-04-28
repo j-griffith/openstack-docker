@@ -1,0 +1,31 @@
+{
+  "vhosts": [
+    {"name": "glance"},
+    {"name": "nova"},
+    {"name": "neutron"},
+    {"name": "cinder"},
+    {"name": "heat"}
+  ],
+  "users": [
+    {"name": "admin",   "password": "55b065a053355313a35fa8653b4bb65e4f3da87a93d93b6fb1312b9be23a3be2a3cecb476450edd1", "tags": "administrator"},
+    {"name": "glance",  "password": "88cc556dbba0cda16baffe9736fdb4d67cf66bbe8950193a95da0adf4a61172a75fb0d81af82387e", "tags": "glance"},
+    {"name": "nova",    "password": "f9e9809aff3903b5d68773ba0086c5d712da75367400a1b45304dd5e870a11829cc7243039489438", "tags": "nova"},
+    {"name": "neutron", "password": "b4e77a3d23fc9f348cb1a8930db9dd388c1b8beb9439fff87b84b471f1b916d7465b5215274094be", "tags": "neutron"},
+    {"name": "cinder",  "password": "32e6dee55e858c4eef2616a1c276ceb6090162efa0fdbed1fc46953ae3b2349fc2f16508239ddb41", "tags": "cinder"},
+    {"name": "heat",    "password": "6560902b5e685d841a20e5cc9437f33178982cc832ff8ba18ea71086a2c344114e3dd276fae57cb0", "tags": "heat"}
+  ],
+  "permissions": [
+    {"user": "glance",  "vhost": "glance",   "configure": ".*", "write": ".*", "read": ".*"},
+    {"user": "nova",    "vhost": "nova",     "configure": ".*", "write": ".*", "read": ".*"},
+    {"user": "neutron", "vhost": "neutron",  "configure": ".*", "write": ".*", "read": ".*"},
+    {"user": "cinder",  "vhost": "cinder",   "configure": ".*", "write": ".*", "read": ".*"},
+    {"user": "heat",    "vhost": "heat",     "configure": ".*", "write": ".*", "read": ".*"}
+  ],
+  "policies":[
+    {"vhost": "glance",   "name": "ha-all", "pattern": ".*", "apply-to": "all", "definition": {"ha-mode":"all"}, "priority":0},
+    {"vhost": "nova",     "name": "ha-all", "pattern": ".*", "apply-to": "all", "definition": {"ha-mode":"all"}, "priority":0},
+    {"vhost": "neutron",  "name": "ha-all", "pattern": ".*", "apply-to": "all", "definition": {"ha-mode":"all"}, "priority":0},
+    {"vhost": "cinder",   "name": "ha-all", "pattern": ".*", "apply-to": "all", "definition": {"ha-mode":"all"}, "priority":0},
+    {"vhost": "heat",     "name": "ha-all", "pattern": ".*", "apply-to": "all", "definition": {"ha-mode":"all"}, "priority":0}
+  ]
+}
