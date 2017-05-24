@@ -1,0 +1,43 @@
+version: "3"
+services:
+  chown:
+    entrypoint: /etc/keystone/chown.sh
+    network_mode: none
+    volumes:
+      - /etc/keystone/:/etc/keystone/:ro
+      - data:/var/lib/keystone/
+      - logs:/var/log/keystone/
+    image: samyaple/loci-keystone:newton
+    user: root
+    container_name: keystone_chown
+  bootstrap:
+    entrypoint: /etc/keystone/bootstrap.sh
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/keystone/:/etc/keystone/:ro
+      - data:/var/lib/keystone/
+      - logs:/var/log/keystone/
+    environment:
+      - KEYSTONE_BOOTSTRAP=${KEYSTONE_BOOTSTRAP}
+      - LB_URI=http://10.10.1.1
+      - OS_BOOTSTRAP_REGION_ID=yaple-prod
+      - OS_BOOTSTRAP_PASSWORD=${KEYSTONE_ADMIN_PASS:-$OS_BOOTSTRAP_PASSWORD}
+    image: samyaple/loci-keystone:newton
+    user: keystone
+    container_name: keystone_bootstrap
+  keystone:
+    entrypoint: /etc/keystone/keystone.sh
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/keystone/:/etc/keystone/:ro
+      - data:/var/lib/keystone/
+      - logs:/var/log/keystone/
+    image: samyaple/loci-keystone:newton
+    user: keystone
+    container_name: keystone
+    restart: always
+volumes:
+  data:
+  logs:

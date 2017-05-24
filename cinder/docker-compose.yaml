@@ -1,0 +1,68 @@
+version: "3"
+services:
+  chown:
+    entrypoint: /etc/cinder/chown.sh
+    network_mode: none
+    volumes:
+      - /etc/cinder/:/etc/cinder/:ro
+      - data:/var/lib/cinder/
+      - logs:/var/log/cinder/
+    image: samyaple/loci-cinder:newton-ceph
+    user: root
+    container_name: cinder_chown
+  bootstrap:
+    entrypoint: /etc/cinder/bootstrap.sh
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/cinder/:/etc/cinder/:ro
+      - data:/var/lib/cinder/
+      - logs:/var/log/cinder/
+    environment:
+      - CINDER_BOOTSTRAP=${CINDER_BOOTSTRAP:-0}
+    image: samyaple/loci-cinder:newton-ceph
+    user: cinder
+    container_name: cinder_bootstrap
+  cinder-api:
+    entrypoint: /etc/cinder/cinder.sh
+    command: cinder-api
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/cinder/:/etc/cinder/:ro
+      - data:/var/lib/cinder/
+      - logs:/var/log/cinder/
+    image: samyaple/loci-cinder:newton-ceph
+    user: cinder
+    container_name: cinder-api
+    restart: always
+  cinder-scheduler:
+    entrypoint: /etc/cinder/cinder.sh
+    command: cinder-scheduler
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/cinder/:/etc/cinder/:ro
+      - data:/var/lib/cinder/
+      - logs:/var/log/cinder/
+    image: samyaple/loci-cinder:newton-ceph
+    user: cinder
+    container_name: cinder-scheduler
+    restart: always
+  cinder-volume:
+    entrypoint: /etc/cinder/cinder.sh
+    command: cinder-volume
+    network_mode: host
+    volumes:
+      - /etc/ceph/:/etc/ceph/:ro
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/cinder/:/etc/cinder/:ro
+      - data:/var/lib/cinder/
+      - logs:/var/log/cinder/
+    image: samyaple/loci-cinder:newton-ceph
+    user: cinder
+    container_name: cinder-volume
+    restart: always
+volumes:
+  data:
+  logs:

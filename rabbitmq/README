@@ -1,0 +1,19 @@
+The matching configs bind to the appropriate ip and ports.
+The hostname is 'server01-private' and it is resolvable to '10.11.1.1'.
+The management plugin binds to a seperate address of '10.10.1.1' and does not need to be resolvable.
+
+Ports:
+  * 4369/tcp -- erlang
+  * 5672/tcp -- rabbitmq
+  * 15672/tcp -- rabbitmq management port
+  * 25672/tcp -- cluster port
+
+The following commands will initialize the rabbitmq directories to ensure we can run the daemon as a non-root user.
+
+docker run --rm -t -v rabbitmq:/var/lib/rabbitmq/ --entrypoint /bin/bash rabbitmq:3.6.9 -c "
+    set -eux;
+    echo CHANGEMEPASSWORD > /var/lib/rabbitmq/.erlang.cookie;
+    chmod 0400 /var/lib/rabbitmq/.erlang.cookie;
+    chown -R rabbitmq:rabbitmq /var/lib/rabbitmq;
+"
+docker run -d -t --net host --name rabbitmq --restart=always -v /etc/rabbitmq/:/etc/rabbitmq/ -v rabbitmq:/var/lib/rabbitmq/ -u rabbitmq --entrypoint rabbitmq-server rabbitmq:3.6.9

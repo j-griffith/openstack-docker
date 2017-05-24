@@ -1,0 +1,13 @@
+The matching configs bind to the appropriate ip and ports.
+The hostname is 'server01' and it is resolvable to '10.10.1.1'.
+The hostname is 'server01-private' and it is resolvable to '10.11.1.1'.
+
+Ports:
+  * 5000/tcp -- keystone
+
+In Keystone v2 port 35357 was used to run the admin api which had different options.
+In Keystone v3 all options are available in both the public and admin apis. These configs are pure Keystone v3
+
+# To bootstrap the database the initial time, run ./bootstrap.sh
+docker run -d -t --net host --restart=always --name memcached -u memcache --entrypoint memcached memcached:1.4.36 -m 1024 -l 10.11.1.1
+docker run -d -t --name keystone --restart=always --net=host -v /etc/openstack/globals.conf:/etc/openstack/globals.conf:ro -v /etc/keystone/:/etc/keystone/:ro -u keystone samyaple/loci-keystone:newton /etc/keystone/keystone.sh

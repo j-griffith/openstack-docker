@@ -1,0 +1,25 @@
+The matching configs bind to the appropriate ip and ports.
+The hostname is 'server01' and it is resolvable to '10.10.1.1'.
+The hostname is 'server01-private' and it is resolvable to '10.11.1.1'.
+All mysql traffic will go over 10.10.1.1 and all replication traffic will go over 10.11.1.1
+
+Ports:
+  * 3306/tcp -- mysql
+  * 4444/tcp -- SST
+  * 4567/tcp -- IST                                                                                                                                            
+  * 4567/udp -- IST
+  * 4568/tcp -- WSREP
+
+Environment Vars:
+  * MARIADB_USER_NAME       -- User name for the initial mysql user
+  * MARIADB_USER_PASS       -- Password for the initial mysql user
+  * MARIADB_USER_WSREP_NAME -- User name for the wsrep user
+  * MARIADB_USER_WSREP_PASS -- Password for the wsrep user
+  * MARIADB_BOOTSTRAP       -- Set to 1 to bootstrap the node
+  # MARIADB_WSREP_NEW_CLUSTER -- Set --wsrep-new-cluster on mysqld
+
+The environment variables are only used if you are bootstrapping.
+Only set MARIADB_BOOTSTRAP=1 on the first node in a new cluster.
+Only set MARIADB_WSREP_NEW_CLUSTER=1 if all cluster nodes are down.
+
+docker-compose up -d

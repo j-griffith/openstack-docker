@@ -1,0 +1,44 @@
+version: "3"
+services:
+  chown:
+    entrypoint: /etc/mysql/chown.sh
+    network_mode: none
+    volumes:
+      - /etc/mysql/:/etc/mysql/:ro
+      - data:/var/lib/mysql/
+      - logs:/var/log/mysql/
+    image: mariadb:10.1.22
+    user: root
+    container_name: mariadb_chown
+  bootstrap:
+    entrypoint: /etc/mysql/bootstrap.sh
+    network_mode: none
+    volumes:
+      - /etc/mysql/:/etc/mysql/:ro
+      - data:/var/lib/mysql/
+      - logs:/var/log/mysql/
+    environment:
+      - MARIADB_BOOTSTRAP=${MARIADB_BOOTSTRAP:-0}
+      - MARIADB_USER_NAME=${MARIADB_USER_NAME}
+      - MARIADB_USER_PASS=${MARIADB_USER_PASS}
+      - MARIADB_USER_WSREP_NAME=${MARIADB_USER_WSREP_NAME}
+      - MARIADB_USER_WSREP_PASS=${MARIADB_USER_WSREP_PASS}
+    image: mariadb:10.1.22
+    user: mysql
+    container_name: mariadb_bootstrap
+  mysqld:
+    entrypoint: /etc/mysql/mysqld.sh
+    network_mode: host
+    volumes:
+      - /etc/mysql/:/etc/mysql/:ro
+      - data:/var/lib/mysql/
+      - logs:/var/log/mysql/
+    environment:
+      - MARIADB_WSREP_NEW_CLUSTER=${MARIADB_WSREP_NEW_CLUSTER:-0}
+    image: mariadb:10.1.22
+    user: mysql
+    container_name: mariadb
+    restart: always
+volumes:
+  data:
+  logs:

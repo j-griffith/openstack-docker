@@ -1,0 +1,15 @@
+The matching configs bind to the appropriate ip and ports.
+The hostname is 'server01' and it is resolvable to '10.10.1.1'.
+The hostname is 'server01-private' and it is resolvable to '10.11.1.1'.
+
+Ports:
+  * 9191/tcp -- glance-registry
+  * 9292/tcp -- glance-api
+
+# Bootstrap
+# The glance-manage command cannot use more than a single conf, so we maintain a conf specifically for glance-manage
+docker run --rm -it --net=host -v /etc/glance/:/etc/glance/:ro -u glance samyaple/loci-glance:newton-ceph glance-db-manage --config-file /etc/glance/glance-manage.conf db_sync
+
+docker run -d -t --net host --restart=always --name memcached -u memcache --entrypoint memcached memcached:1.4.36 -m 1024 -l 10.11.1.1
+docker run -d -t --name glance-registry --restart=always --net=host -v /etc/openstack/globals.conf:/etc/openstack/globals.conf:ro -v /etc/glance/:/etc/glance/:ro -u glance samyaple/loci-glance:newton-ceph /etc/glance/glance.sh glance-registry
+docker run -d -t --name glance-api --restart=always --net=host -v /etc/openstack/globals.conf:/etc/openstack/globals.conf:ro -v /etc/glance/:/etc/glance/:ro -u glance samyaple/loci-glance:newton-ceph /etc/glance/glance.sh glance-api

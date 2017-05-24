@@ -1,0 +1,54 @@
+version: "3"
+services:
+  chown:
+    entrypoint: /etc/glance/chown.sh
+    network_mode: none
+    volumes:
+      - /etc/glance/:/etc/glance/:ro
+      - data:/var/lib/glance/
+      - logs:/var/log/glance/
+    image: samyaple/loci-glance:newton-ceph
+    user: root
+    container_name: glance_chown
+  bootstrap:
+    entrypoint: /etc/glance/bootstrap.sh
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/glance/:/etc/glance/:ro
+      - data:/var/lib/glance/
+      - logs:/var/log/glance/
+    environment:
+      - GLANCE_BOOTSTRAP=${GLANCE_BOOTSTRAP}
+    image: samyaple/loci-glance:newton-ceph
+    user: glance
+    container_name: glance_bootstrap
+  glance-api:
+    entrypoint: /etc/glance/glance.sh
+    command: glance-api
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/glance/:/etc/glance/:ro
+      - data:/var/lib/glance/
+      - logs:/var/log/glance/
+    image: samyaple/loci-glance:newton-ceph
+    user: glance
+    container_name: glance-api
+    restart: always
+  glance-registry:
+    entrypoint: /etc/glance/glance.sh
+    command: glance-registry
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/glance/:/etc/glance/:ro
+      - data:/var/lib/glance/
+      - logs:/var/log/glance/
+    image: samyaple/loci-glance:newton-ceph
+    user: glance
+    container_name: glance-registry
+    restart: always
+volumes:
+  data:
+  logs:

@@ -1,0 +1,39 @@
+version: "3"
+services:
+  chown:
+    entrypoint: /etc/rabbitmq/chown.sh
+    network_mode: none
+    volumes:
+      - /etc/rabbitmq/:/etc/rabbitmq/:ro
+      - rabbitmq:/var/lib/rabbitmq/
+      - rabbitmq_logs:/var/log/rabbitmq/
+    image: rabbitmq:3.6.9
+    user: root
+    container_name: rabbitmq_chown
+  bootstrap:
+    entrypoint: /etc/rabbitmq/bootstrap.sh
+    network_mode: none
+    volumes:
+      - /etc/rabbitmq/:/etc/rabbitmq/:ro
+      - rabbitmq:/var/lib/rabbitmq/
+      - rabbitmq_logs:/var/log/rabbitmq/
+    environment:
+      - RABBITMQ_BOOTSTRAP=${RABBITMQ_BOOTSTRAP}
+      - RABBITMQ_COOKIE=${RABBITMQ_COOKIE}
+    image: rabbitmq:3.6.9
+    user: rabbitmq
+    container_name: rabbitmq_bootstrap
+  rabbitmq:
+    entrypoint: /etc/rabbitmq/rabbitmq-server.sh
+    network_mode: host
+    volumes:
+      - /etc/rabbitmq/:/etc/rabbitmq/:ro
+      - rabbitmq:/var/lib/rabbitmq/
+      - rabbitmq_logs:/var/log/rabbitmq/
+    image: rabbitmq:3.6.9
+    user: rabbitmq
+    container_name: rabbitmq
+    restart: always
+volumes:
+  rabbitmq:
+  rabbitmq_logs:

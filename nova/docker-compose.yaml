@@ -1,0 +1,93 @@
+version: "3"
+services:
+  chown:
+    entrypoint: /etc/nova/chown.sh
+    network_mode: none
+    volumes:
+      - /etc/nova/:/etc/nova/:ro
+      - /var/lib/nova/:/var/lib/nova/
+      - logs:/var/log/nova/
+    image: samyaple/loci-nova:newton-ceph
+    user: root
+    container_name: nova_chown
+  bootstrap:
+    entrypoint: /etc/nova/bootstrap.sh
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/nova/:/etc/nova/:ro
+      - /var/lib/nova/:/var/lib/nova/
+      - logs:/var/log/nova/
+    environment:
+      - NOVA_BOOTSTRAP=${NOVA_BOOTSTRAP:-0}
+    image: samyaple/loci-nova:newton-ceph
+    user: nova
+    container_name: nova_bootstrap
+  nova-api:
+    entrypoint: /etc/nova/nova.sh
+    command: nova-api
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/nova/:/etc/nova/:ro
+      - /var/lib/nova/:/var/lib/nova/
+      - logs:/var/log/nova/
+    image: samyaple/loci-nova:newton-ceph
+    user: nova
+    container_name: nova-api
+    restart: always
+  nova-api-metadata:
+    entrypoint: /etc/nova/nova.sh
+    command: nova-api-metadata
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/nova/:/etc/nova/:ro
+      - /var/lib/nova/:/var/lib/nova/
+      - logs:/var/log/nova/
+    image: samyaple/loci-nova:newton-ceph
+    user: nova
+    container_name: nova-api-metadata
+    restart: always
+  nova-scheduler:
+    entrypoint: /etc/nova/nova.sh
+    command: nova-scheduler
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/nova/:/etc/nova/:ro
+      - /var/lib/nova/:/var/lib/nova/
+      - logs:/var/log/nova/
+    image: samyaple/loci-nova:newton-ceph
+    user: nova
+    container_name: nova-scheduler
+    restart: always
+  nova-compute:
+    entrypoint: /etc/nova/nova.sh
+    command: nova-compute
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/nova/:/etc/nova/:ro
+      - /var/lib/nova/:/var/lib/nova/
+      - logs:/var/log/nova/
+    image: samyaple/loci-nova:newton-ceph
+    user: nova
+    container_name: nova-compute
+    restart: always
+  nova-conductor:
+    entrypoint: /etc/nova/nova.sh
+    command: nova-conductor
+    network_mode: host
+    volumes:
+      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
+      - /etc/nova/:/etc/nova/:ro
+      - /var/lib/nova/:/var/lib/nova/
+      - logs:/var/log/nova/
+    image: samyaple/loci-nova:newton-ceph
+    user: nova
+    container_name: nova-conductor
+    restart: always
+volumes:
+  data:
+  logs:
