@@ -7,71 +7,86 @@ services:
       - /etc/nova/:/etc/nova/:ro
       - /var/lib/nova/:/var/lib/nova/
       - logs:/var/log/nova/
-    image: samyaple/loci-nova:newton-ceph
+    image: samyaple/loci-nova:ubuntu-ocata-ceph
     user: root
-    container_name: nova_chown
+    container_name: nova-chown
   bootstrap:
     entrypoint: /etc/nova/bootstrap.sh
     network_mode: host
     volumes:
-      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
       - /etc/nova/:/etc/nova/:ro
       - /var/lib/nova/:/var/lib/nova/
       - logs:/var/log/nova/
     environment:
       - NOVA_BOOTSTRAP=${NOVA_BOOTSTRAP:-0}
-    image: samyaple/loci-nova:newton-ceph
+    image: samyaple/loci-nova:ubuntu-ocata-ceph
     user: nova
-    container_name: nova_bootstrap
+    container_name: nova-bootstrap
   nova-api:
     entrypoint: /etc/nova/nova.sh
     command: nova-api
     network_mode: host
     volumes:
-      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
       - /etc/nova/:/etc/nova/:ro
+      - /etc/ceph/:/etc/ceph/:ro
       - /var/lib/nova/:/var/lib/nova/
       - logs:/var/log/nova/
-    image: samyaple/loci-nova:newton-ceph
+    image: samyaple/loci-nova:ubuntu-ocata-ceph
     user: nova
     container_name: nova-api
     restart: always
-  nova-api-metadata:
-    entrypoint: /etc/nova/nova.sh
-    command: nova-api-metadata
+  nova-metadata-api:
+    entrypoint: /etc/nova/nova-metadata-api.sh
+    command: nova-api
     network_mode: host
     volumes:
-      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
       - /etc/nova/:/etc/nova/:ro
+      - /etc/ceph/:/etc/ceph/:ro
       - /var/lib/nova/:/var/lib/nova/
       - logs:/var/log/nova/
-    image: samyaple/loci-nova:newton-ceph
-    user: nova
-    container_name: nova-api-metadata
+    image: samyaple/loci-nova:ubuntu-ocata-ceph
+    container_name: nova-metadata-api
+    restart: always
+  nova-placement-api:
+    entrypoint: /etc/nova/nova-placement-api.sh
+    command: nova-placement-api
+    network_mode: host
+    volumes:
+      - /etc/nova/:/etc/nova/:ro
+      - /etc/ceph/:/etc/ceph/:ro
+      - /var/lib/nova/:/var/lib/nova/
+      - logs:/var/log/nova/
+    image: samyaple/loci-nova:ubuntu-ocata-ceph
+    container_name: nova-placement-api
     restart: always
   nova-scheduler:
     entrypoint: /etc/nova/nova.sh
     command: nova-scheduler
     network_mode: host
     volumes:
-      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
       - /etc/nova/:/etc/nova/:ro
+      - /etc/ceph/:/etc/ceph/:ro
       - /var/lib/nova/:/var/lib/nova/
       - logs:/var/log/nova/
-    image: samyaple/loci-nova:newton-ceph
+    image: samyaple/loci-nova:ubuntu-ocata-ceph
     user: nova
     container_name: nova-scheduler
     restart: always
   nova-compute:
-    entrypoint: /etc/nova/nova.sh
+    entrypoint: /etc/nova/nova-compute.sh
+    security_opt:
+      - seccomp:unconfined
     command: nova-compute
     network_mode: host
+    privileged: true
     volumes:
-      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
       - /etc/nova/:/etc/nova/:ro
+      - /etc/ceph/:/etc/ceph/:ro
+      - /run/openvswitch/:/run/openvswitch/
+      - /etc/nova/nova_sudoers:/etc/sudoers.d/nova_sudoers:ro
       - /var/lib/nova/:/var/lib/nova/
       - logs:/var/log/nova/
-    image: samyaple/loci-nova:newton-ceph
+    image: samyaple/loci-nova:ubuntu-ocata-ceph
     user: nova
     container_name: nova-compute
     restart: always
@@ -80,13 +95,26 @@ services:
     command: nova-conductor
     network_mode: host
     volumes:
-      - /etc/openstack/global.conf:/etc/openstack/global.conf:ro
       - /etc/nova/:/etc/nova/:ro
+      - /etc/ceph/:/etc/ceph/:ro
       - /var/lib/nova/:/var/lib/nova/
       - logs:/var/log/nova/
-    image: samyaple/loci-nova:newton-ceph
+    image: samyaple/loci-nova:ubuntu-ocata-ceph
     user: nova
     container_name: nova-conductor
+    restart: always
+  nova-novncproxy:
+    entrypoint: /etc/nova/nova.sh
+    command: nova-novncproxy
+    network_mode: host
+    volumes:
+      - /etc/nova/:/etc/nova/:ro
+      - /etc/nova/noVNC/:/usr/share/novnc/:ro
+      - /var/lib/nova/:/var/lib/nova/
+      - logs:/var/log/nova/
+    image: samyaple/loci-nova:ubuntu-ocata-ceph
+    user: nova
+    container_name: nova-novncproxy
     restart: always
 volumes:
   data:

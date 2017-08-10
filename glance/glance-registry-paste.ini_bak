@@ -1,4 +1,4 @@
-[pipeline:glance-registry]
+[pipeline:glance-registry-keystone]
 pipeline = healthcheck osprofiler authtoken context registryapp
 
 [app:registryapp]

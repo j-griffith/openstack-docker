@@ -1,0 +1,98 @@
+version: "3"
+services:
+  chown:
+    entrypoint: /etc/neutron/chown.sh
+    network_mode: none
+    volumes:
+      - /etc/neutron/:/etc/neutron/:ro
+      - /var/lib/neutron/:/var/lib/neutron/
+      - logs:/var/log/neutron/
+    image: samyaple/loci-neutron:ubuntu-10.0.2
+    user: root
+    container_name: neutron-chown
+  bootstrap:
+    entrypoint: /etc/neutron/bootstrap.sh
+    network_mode: host
+    volumes:
+      - /etc/neutron/:/etc/neutron/:ro
+      - /var/lib/neutron/:/var/lib/neutron/
+      - logs:/var/log/neutron/
+    environment:
+      - NEUTRON_BOOTSTRAP=${NEUTRON_BOOTSTRAP:-0}
+    image: samyaple/loci-neutron:ubuntu-10.0.2
+    user: neutron
+    container_name: neutron-bootstrap
+  neutron-server:
+    entrypoint: /etc/neutron/neutron.sh
+    command: neutron-server
+    network_mode: host
+    volumes:
+      - /etc/neutron/:/etc/neutron/:ro
+      - /var/lib/neutron/:/var/lib/neutron/
+      - logs:/var/log/neutron/
+    image: samyaple/loci-neutron:ubuntu-10.0.2
+    user: neutron
+    container_name: neutron-server
+    restart: always
+  neutron-dhcp-agent:
+    entrypoint: /etc/neutron/neutron.sh
+    command: neutron-dhcp-agent
+    network_mode: host
+    privileged: True
+    volumes:
+      - /etc/neutron/:/etc/neutron/:ro
+      - /run/openvswitch/:/run/openvswitch/
+      - /etc/neutron/neutron_sudoers:/etc/sudoers.d/neutron_sudoers
+      - /run/netns/:/run/netns/:shared
+      - /var/lib/neutron/:/var/lib/neutron/
+      - logs:/var/log/neutron/
+    image: samyaple/loci-neutron:ubuntu-10.0.2
+    user: neutron
+    container_name: neutron-dhcp-agent
+    restart: always
+  neutron-l3-agent:
+    entrypoint: /etc/neutron/neutron.sh
+    command: neutron-l3-agent
+    network_mode: host
+    privileged: True
+    volumes:
+      - /etc/neutron/:/etc/neutron/:ro
+      - /run/openvswitch/:/run/openvswitch/
+      - /etc/neutron/neutron_sudoers:/etc/sudoers.d/neutron_sudoers
+      - /run/netns/:/run/netns/:shared
+      - /var/lib/neutron/:/var/lib/neutron/
+      - logs:/var/log/neutron/
+    image: samyaple/loci-neutron:ubuntu-10.0.2
+    user: neutron
+    container_name: neutron-l3-agent
+    restart: always
+  neutron-metadata-agent:
+    entrypoint: /etc/neutron/neutron.sh
+    command: neutron-metadata-agent
+    network_mode: host
+    volumes:
+      - /etc/neutron/:/etc/neutron/:ro
+      - /run/netns/:/run/netns/:shared
+      - /var/lib/neutron/:/var/lib/neutron/
+      - logs:/var/log/neutron/
+    image: samyaple/loci-neutron:ubuntu-10.0.2
+    user: neutron
+    container_name: neutron-metadata-agent
+    restart: always
+  neutron-openvswitch-agent:
+    entrypoint: /etc/neutron/neutron.sh
+    command: neutron-openvswitch-agent
+    network_mode: host
+    volumes:
+      - /etc/neutron/:/etc/neutron/:ro
+      - /run/openvswitch/:/run/openvswitch/
+      - /etc/neutron/neutron_sudoers:/etc/sudoers.d/neutron_sudoers
+      - /var/lib/neutron/:/var/lib/neutron/
+      - logs:/var/log/neutron/
+    image: samyaple/loci-neutron:ubuntu-10.0.2
+    user: neutron
+    container_name: neutron-openvswitch-agent
+    restart: always
+volumes:
+  data:
+  logs:

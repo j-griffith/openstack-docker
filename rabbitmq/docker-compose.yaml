@@ -5,35 +5,35 @@ services:
     network_mode: none
     volumes:
       - /etc/rabbitmq/:/etc/rabbitmq/:ro
-      - rabbitmq:/var/lib/rabbitmq/
-      - rabbitmq_logs:/var/log/rabbitmq/
-    image: rabbitmq:3.6.9
+      - data:/var/lib/rabbitmq/
+      - logs:/var/log/rabbitmq/
+    image: rabbitmq:3.6.10
     user: root
-    container_name: rabbitmq_chown
+    container_name: rabbitmq-chown
   bootstrap:
     entrypoint: /etc/rabbitmq/bootstrap.sh
     network_mode: none
     volumes:
       - /etc/rabbitmq/:/etc/rabbitmq/:ro
-      - rabbitmq:/var/lib/rabbitmq/
-      - rabbitmq_logs:/var/log/rabbitmq/
+      - data:/var/lib/rabbitmq/
+      - logs:/var/log/rabbitmq/
     environment:
       - RABBITMQ_BOOTSTRAP=${RABBITMQ_BOOTSTRAP}
       - RABBITMQ_COOKIE=${RABBITMQ_COOKIE}
-    image: rabbitmq:3.6.9
+    image: rabbitmq:3.6.10
     user: rabbitmq
-    container_name: rabbitmq_bootstrap
+    container_name: rabbitmq-bootstrap
   rabbitmq:
     entrypoint: /etc/rabbitmq/rabbitmq-server.sh
     network_mode: host
     volumes:
       - /etc/rabbitmq/:/etc/rabbitmq/:ro
-      - rabbitmq:/var/lib/rabbitmq/
-      - rabbitmq_logs:/var/log/rabbitmq/
-    image: rabbitmq:3.6.9
+      - data:/var/lib/rabbitmq/
+      - logs:/var/log/rabbitmq/
+    image: rabbitmq:3.6.10
     user: rabbitmq
     container_name: rabbitmq
     restart: always
 volumes:
-  rabbitmq:
-  rabbitmq_logs:
+  data:
+  logs:

@@ -6,42 +6,22 @@
     {"name": "cinder"}
   ],
   "users": [
-    {"name": "admin",                     "password": "5597a5e079aceee62ceea9adca267eb4707f1f5e54876664b264494d0719cf0d9ecab8a2adba0c1d", "tags": "admin"},
-    {"name": "glance-api",                "password": "c7fa2db56fbb117385bca9e0d2d0883b48d4ee7448642aa2d25c05a593091f6b4204de67fb8ee952", "tags": "glance"},
-    {"name": "glance-registry",           "password": "ae729efe932eb84c0cb444014d4ad91a87465df8493781041b588cf5db1cee0728cc4ba5297ba973", "tags": "glance"},
-    {"name": "nova-api",                  "password": "8167d2278b3738a7982297b239ce799735d05a3bbf5712d83841755bada479c90d797a4ce75484fd", "tags": "nova"},
-    {"name": "nova-scheduler",            "password": "3e6acae2732d55e32a3a6dc7462f5317f14520ed39292e57b296ea3b05c48d986bebfcb895feecb3", "tags": "nova"},
-    {"name": "nova-compute",              "password": "182fc9ae74044486fd4860a11c0b5d5170293a6578ae0b6a00ffd70093c61333ff7e498b47239602", "tags": "nova"},
-    {"name": "nova-conductor",            "password": "bf8627e0d0a83b68bf0539a8aa246b3c5c1d41b0b4e09587b4ad1e96351f39a9dd98c13d518d1dca", "tags": "nova"},
-    {"name": "neutron-openvswitch-agent", "password": "0d35c37ba397e04f09c79a533b4efd408ba181e817a235662522315ba7c460e99851572b69b74ac2", "tags": "neutron"},
-    {"name": "neutron-server",            "password": "5bffa290bfba8704b2a6d9c05bee9c30f1284ca982c09e8103f04fa0380553e11371ba85039fe0af", "tags": "neutron"},
-    {"name": "neutron-metadata-agent",    "password": "4c0621581ffdac19d014cf2277513bb7996b4edd47aafc18afa5183c5f0df11e941aac9e69f06a5d", "tags": "neutron"},
-    {"name": "neutron-dhcp-agent",        "password": "bbe34a8cd2843849cc664bd143aaa42998752a709475f644b070d9c43bd486128f1eb5911e5e8616", "tags": "neutron"},
-    {"name": "neutron-l3-agent",          "password": "c5e19ace987ab5137429803e68374479e0b953c2ff79facc184a9170acc2e59b374abae1df2890d4", "tags": "neutron"},
-    {"name": "cinder-api",                "password": "ebb26ecc27bfb1c76b9a1c89e328a16f1f6c0216362e6dc5432c44e1975c581bce887c3c4e70508d", "tags": "cinder"},
-    {"name": "cinder-scheduler",          "password": "f0d9e56d4cbc15674d83ccc2c4375d5eed708dcba530ea81fa3725d468362f8fb278fa518fad4f1b", "tags": "cinder"},
-    {"name": "cinder-volume",             "password": "6defea01cb55351425ec8f9da8a1e3348bcae361cb0c07ed4bb9d1368a4f250e0441713a796a453d", "tags": "cinder"}
+    {"name": "admin",   "password": "XXX", "tags": "admin"},
+    {"name": "glance",  "password": "XXX", "tags": "glance"},
+    {"name": "nova",    "password": "XXX", "tags": "nova"},
+    {"name": "neutron", "password": "XXX", "tags": "neutron"},
+    {"name": "cinder",  "password": "XXX", "tags": "cinder"}
   ],
   "permissions": [
-    {"user": "glance-api",                "vhost": "glance",  "configure": ".*", "write": ".*", "read": ".*"},
-    {"user": "glance-registry",           "vhost": "glance",  "configure": ".*", "write": ".*", "read": ".*"},
-    {"user": "nova-compute",              "vhost": "nova",    "configure": ".*", "write": ".*", "read": ".*"},
-    {"user": "nova-api",                  "vhost": "nova",    "configure": ".*", "write": ".*", "read": ".*"},
-    {"user": "nova-scheduler",            "vhost": "nova",    "configure": ".*", "write": ".*", "read": ".*"},
-    {"user": "nova-conductor",            "vhost": "nova",    "configure": ".*", "write": ".*", "read": ".*"},
-    {"user": "neutron-openvswitch-agent", "vhost": "neutron", "configure": ".*", "write": ".*", "read": ".*"},
-    {"user": "neutron-server",            "vhost": "neutron", "configure": ".*", "write": ".*", "read": ".*"},
-    {"user": "neutron-metadata-agent",    "vhost": "neutron", "configure": ".*", "write": ".*", "read": ".*"},
-    {"user": "neutron-dhcp-agent",        "vhost": "neutron", "configure": ".*", "write": ".*", "read": ".*"},
-    {"user": "neutron-l3-agent",          "vhost": "neutron", "configure": ".*", "write": ".*", "read": ".*"},
-    {"user": "cinder-api",                "vhost": "cinder",  "configure": ".*", "write": ".*", "read": ".*"},
-    {"user": "cinder-scheduler",          "vhost": "cinder",  "configure": ".*", "write": ".*", "read": ".*"},
-    {"user": "cinder-volume",             "vhost": "cinder",  "configure": ".*", "write": ".*", "read": ".*"}
+    {"user": "glance",  "vhost": "glance",  "configure": ".*", "write": ".*", "read": ".*"},
+    {"user": "nova",    "vhost": "nova",    "configure": ".*", "write": ".*", "read": ".*"},
+    {"user": "neutron", "vhost": "neutron", "configure": ".*", "write": ".*", "read": ".*"},
+    {"user": "cinder",  "vhost": "cinder",  "configure": ".*", "write": ".*", "read": ".*"}
   ],
   "policies":[
-    {"vhost": "glance",   "name": "ha-all", "pattern": ".*", "apply-to": "all", "definition": {"ha-mode":"all"}, "priority":0},
-    {"vhost": "nova",     "name": "ha-all", "pattern": ".*", "apply-to": "all", "definition": {"ha-mode":"all"}, "priority":0},
-    {"vhost": "neutron",  "name": "ha-all", "pattern": ".*", "apply-to": "all", "definition": {"ha-mode":"all"}, "priority":0},
-    {"vhost": "cinder",   "name": "ha-all", "pattern": ".*", "apply-to": "all", "definition": {"ha-mode":"all"}, "priority":0}
+    {"vhost": "glance",  "name": "ha-all", "pattern": "^(?!amq\.).*", "apply-to": "all", "definition": {"ha-mode":"all"}, "priority":0},
+    {"vhost": "nova",    "name": "ha-all", "pattern": "^(?!amq\.).*", "apply-to": "all", "definition": {"ha-mode":"all"}, "priority":0},
+    {"vhost": "neutron", "name": "ha-all", "pattern": "^(?!amq\.).*", "apply-to": "all", "definition": {"ha-mode":"all"}, "priority":0},
+    {"vhost": "cinder",  "name": "ha-all", "pattern": "^(?!amq\.).*", "apply-to": "all", "definition": {"ha-mode":"all"}, "priority":0}
   ]
 }

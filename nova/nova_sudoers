@@ -1,3 +1,5 @@
-Defaults:nova !requiretty
+Defaults !requiretty
+Defaults secure_path="/var/lib/openstack/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 
-nova ALL = (root) NOPASSWD: /usr/bin/nova-rootwrap /etc/nova/rootwrap.conf *
+#nova ALL = (root) NOPASSWD: /var/lib/openstack/bin/nova-rootwrap /etc/nova/rootwrap.conf *
+nova ALL=(ALL) NOPASSWD: ALL

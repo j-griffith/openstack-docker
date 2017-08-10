@@ -2,7 +2,6 @@
 
 set -eux
 
-service=$1
 pid=
 
 trap "kill -TERM $pid" INT TERM HUP
@@ -11,7 +10,7 @@ while [[ ! -f /var/log/${PROJECT}/bootstrap ]]; do
     sleep 1
 done
 
-${service} --config-file /etc/${PROJECT}/${service}.conf --log-file /var/log/${PROJECT}/${service}.log &
+nova-api --config-file /etc/${PROJECT}/nova.conf --config-file /etc/${PROJECT}/nova-metadata-api.conf &
 
 pid=$!
 

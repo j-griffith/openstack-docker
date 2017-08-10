@@ -1,0 +1,2 @@
+Defaults !requiretty
+neutron ALL = (root) NOPASSWD: /var/lib/openstack/bin/neutron-rootwrap /etc/neutron/rootwrap.conf *

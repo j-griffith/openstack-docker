@@ -11,7 +11,7 @@ while [[ ! -f /var/log/${PROJECT}/bootstrap ]]; do
     sleep 1
 done
 
-${service} --config-file /etc/${PROJECT}/${service}.conf --log-file /var/log/${PROJECT}/${service}.log &
+${service} --config-file /etc/${PROJECT}/nova.conf &
 
 pid=$!
 

@@ -8,6 +8,6 @@ while [[ ! -f /var/log/${PROJECT}/bootstrap ]]; do
     sleep 1
 done
 
-uwsgi --wsgi-file /etc/keystone/keystone-uwsgi.py --http 10.10.1.1:5000 &
+uwsgi --wsgi-file /etc/nova/nova-placement-api-uwsgi.py --http 10.10.1.1:8778 &
 
 wait
